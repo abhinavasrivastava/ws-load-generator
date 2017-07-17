@@ -15,7 +15,7 @@ public class WSLoadGenerator {
 	
 	private static String webSocketAddress = "ws://localhost:3002/testWsSocket";
 	
-	private void initializeWebSocket() throws URISyntaxException {
+	private void initializeWebSocket() throws Exception {
 		//ws://localhost:7101/CinemaMonitor/cinemaSocket/
 		System.out.println("REST service: open websocket client at " + webSocketAddress);
 		client = new WSClient(new URI(webSocketAddress + "/0"));
@@ -24,7 +24,7 @@ public class WSLoadGenerator {
 	private void sendMessageOverSocket(String message) {
 			try {
 				initializeWebSocket();
-			} catch (URISyntaxException e) {
+			} catch (Exception e) {
 				e.printStackTrace();
 			}
 		client.sendMessage(message);
@@ -41,14 +41,19 @@ public class WSLoadGenerator {
 		CommandLineParser parser = new BasicParser();
 		CommandLine cmd = parser.parse( options, args);
 		
-		if(cmd.hasOption("c")) {
-			System.out.println(cmd.getOptionValue("c"));
-			numConcurrentConnections = Integer.parseInt(cmd.getOptionValue("c"));
-		}
-		if(cmd.hasOption("a")) {
-			System.out.println(cmd.getOptionValue("a"));
-			webSocketAddress = cmd.getOptionValue("a");
-		}
+		numConcurrentConnections = Integer.parseInt(args[0]);
+		webSocketAddress = args[1];
+		System.out.println(numConcurrentConnections);
+		System.out.println(webSocketAddress);
+		
+//		if(cmd.hasOption("c")) {
+//			System.out.println(cmd.getOptionValue("c"));
+//			numConcurrentConnections = Integer.parseInt(cmd.getOptionValue("c"));
+//		}
+//		if(cmd.hasOption("a")) {
+//			System.out.println(cmd.getOptionValue("a"));
+//			webSocketAddress = cmd.getOptionValue("a");
+//		}
 		
 		WSLoadGenerator lg = new WSLoadGenerator();
 		for(int i =0; i< numConcurrentConnections; i++){
